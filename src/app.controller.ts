@@ -7,16 +7,16 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return 'Hola mundo!';
+    return 'Hola Mundo!';
   }
 
   @Get('nuevo')
-  newEndpoint() {
-    return 'yo soy nuevo';
+  newEndpoint(): string {
+    return 'Yo soy nuevo';
   }
 
   @Get('/ruta/')
-  hello() {
+  hello(): string {
     return 'con /sas/';
   }
 }

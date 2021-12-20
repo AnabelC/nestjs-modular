@@ -9,40 +9,51 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
-  Res,
+  // Res,
   // ParseIntPipe,
 } from '@nestjs/common';
 
-import { Response } from 'express';
-import { ParseIntPipe } from '../common/parse-int.pipe';
-import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
+// import { Response } from 'express';
 
 import { ProductsService } from './../services/products.service';
+
+import { ParseIntPipe } from './../common/parse-int.pipe';
+import { CreateProductDto, UpdateProductDto } from './../dtos/product.dto';
 
 @Controller('products')
 export class ProductsController {
   constructor(private productsService: ProductsService) {}
+  @Get('/filter')
+  getProductFilter(): string {
+    return 'Yo soy un Filter';
+  }
+  // @Get('products')
+  // getProducts(@Query() params: any) {
+  //   const { limit, offset } = params;
+  //   return `products: limit => ${limit} y offset =${offset}`;
+  // }
 
-  @Get()
-  getProducts(
+  @Get('')
+  getAll(
     @Query('limit') limit = 100,
     @Query('offset') offset = 0,
     @Query('brand') brand: string,
   ) {
     // return {
-    //   message: `products limit=> ${limit} offset=> ${offset} brand=> ${brand}`,
+    //   message: `products: limit => ${limit}, offset => ${offset} y brand => ${brand}`,
     // };
     return this.productsService.findAll();
   }
 
-  @Get('filter')
-  getProductFilter() {
-    return `yo soy un filter`;
-  }
+  // @Get('/:productId')
+  // getOne(@Param() params: any): string {
+  //   return `product ${params.productId}`;
+  // }
 
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId', ParseIntPipe) productId: number) {
+    // Forma de express
     // response.status(200).send({
     //   message: `product ${productId}`,
     // });
@@ -52,19 +63,26 @@ export class ProductsController {
   @Post()
   create(@Body() payload: CreateProductDto) {
     // return {
-    //   message: 'accion de crear',
+    //   message: 'accion para crear',
     //   payload,
     // };
-    return this.productsService.create(payload);
+    this.productsService.create(payload);
   }
 
-  @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpdateProductDto) {
-    return this.productsService.update(+id, payload);
+  @Put(':productId')
+  update(
+    @Param('productId', ParseIntPipe) productId: number,
+    @Body() payload: UpdateProductDto,
+  ) {
+    // return {
+    //   productId,
+    //   payload,
+    // };
+    this.productsService.update(productId, payload);
   }
 
-  @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.productsService.remove(+id);
+  @Delete(':productId')
+  delete(@Param('productId', ParseIntPipe) productId: number) {
+    this.productsService.remove(productId);
   }
 }
