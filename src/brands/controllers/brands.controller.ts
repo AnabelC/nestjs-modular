@@ -11,10 +11,10 @@ import {
   HttpCode,
 } from '@nestjs/common';
 
-import { BrandsService } from './../services/brands.service';
+import { BrandsService } from '../services/brands.service';
 
-import { ParseIntPipe } from './../common/parse-int.pipe';
-import { CreateBrandDto, UpdateBrandDto } from './../dtos/brand.dto';
+import { ParseIntPipe } from './../../common/parse-int.pipe';
+import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dto';
 
 @Controller('brands')
 export class BrandsController {

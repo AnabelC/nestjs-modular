@@ -13,7 +13,7 @@ import {
 
 import { CategoriesService } from './../services/categories.service';
 
-import { ParseIntPipe } from './../common/parse-int.pipe';
+import { ParseIntPipe } from './../../common/parse-int.pipe';
 import { CreateCategoryDto, UpdateCategoryDto } from './../dtos/category.dto';
 
 @Controller('categories')

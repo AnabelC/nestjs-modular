@@ -1,36 +1,39 @@
-import { Module } from '@nestjs/common';
+import { Module, HttpModule, HttpService } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ProductsController } from './controllers/products.controller';
-import { CategoriesController } from './controllers/categories.controller';
-import { UsersController } from './controllers/users.controller';
-import { OrdersController } from './controllers/orders.controller';
-import { CustomersController } from './controllers/customers.controller';
-import { BrandsController } from './controllers/brands.controller';
-import { ProductsService } from './services/products.service';
-import { BrandsService } from './services/brands.service';
-import { CategoriesService } from './services/categories.service';
-import { CustomersService } from './services/customers.service';
-import { UsersService } from './services/users.service';
+import { UsersModule } from './users/users.module';
+import { ProductsModule } from './products/products.module';
+import { DatabaseModule } from './database/database.module';
+
+import { enviroments } from './enviroments';
+import config from './config';
 
 @Module({
-  imports: [],
-  controllers: [
-    AppController,
-    ProductsController,
-    CategoriesController,
-    UsersController,
-    OrdersController,
-    CustomersController,
-    BrandsController,
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env',
+      load: [config],
+      isGlobal: true,
+    }),
+    HttpModule,
+    UsersModule,
+    ProductsModule,
+    DatabaseModule,
   ],
+  controllers: [AppController],
   providers: [
     AppService,
-    ProductsService,
-    BrandsService,
-    CategoriesService,
-    CustomersService,
-    UsersService,
+    {
+      provide: 'TASKS',
+      useFactory: async (http: HttpService) => {
+        const tasks = await http
+          .get('https://jsonplaceholder.typicode.com/todos')
+          .toPromise();
+        return tasks.data;
+      },
+      inject: [HttpService],
+    },
   ],
 })
 export class AppModule {}

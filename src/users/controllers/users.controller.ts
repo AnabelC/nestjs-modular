@@ -13,8 +13,8 @@ import {
 
 import { UsersService } from './../services/users.service';
 
-import { ParseIntPipe } from './../common/parse-int.pipe';
-import { CreateUserDto, UpdateUserDto } from './../dtos/user.dto';
+import { ParseIntPipe } from './../../common/parse-int.pipe';
+import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -35,9 +35,15 @@ export class UsersController {
     return this.usersService.findOne(userId);
   }
 
+  @Get(':userId/orders')
+  @HttpCode(HttpStatus.ACCEPTED)
+  getOrders(@Param('userId', ParseIntPipe) userId: number) {
+    return this.usersService.getOrdersByUser(userId);
+  }
+
   @Post()
   create(@Body() payload: CreateUserDto) {
-    this.usersService.create(payload);
+    return this.usersService.create(payload);
   }
 
   @Put(':userId')
@@ -45,11 +51,11 @@ export class UsersController {
     @Param('userId', ParseIntPipe) userId: number,
     @Body() payload: UpdateUserDto,
   ) {
-    this.usersService.update(userId, payload);
+    return this.usersService.update(userId, payload);
   }
 
   @Delete(':userId')
   delete(@Param('userId', ParseIntPipe) userId: number) {
-    this.usersService.remove(userId);
+    return this.usersService.remove(userId);
   }
 }
