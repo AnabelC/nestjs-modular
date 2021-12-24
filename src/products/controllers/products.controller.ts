@@ -9,11 +9,8 @@ import {
   Delete,
   HttpStatus,
   HttpCode,
-  // Res,
-  // ParseIntPipe,
 } from '@nestjs/common';
 
-// import { Response } from 'express';
 import { ApiTags, ApiOperation } from '@nestjs/swagger';
 
 import { ProductsService } from './../services/products.service';
@@ -29,11 +26,6 @@ export class ProductsController {
   getProductFilter(): string {
     return 'Yo soy un Filter';
   }
-  // @Get('products')
-  // getProducts(@Query() params: any) {
-  //   const { limit, offset } = params;
-  //   return `products: limit => ${limit} y offset =${offset}`;
-  // }
 
   @Get('')
   @ApiOperation({ summary: 'List of products' })
@@ -42,33 +34,17 @@ export class ProductsController {
     @Query('offset') offset = 0,
     @Query('brand') brand: string,
   ) {
-    // return {
-    //   message: `products: limit => ${limit}, offset => ${offset} y brand => ${brand}`,
-    // };
     return this.productsService.findAll();
   }
-
-  // @Get('/:productId')
-  // getOne(@Param() params: any): string {
-  //   return `product ${params.productId}`;
-  // }
 
   @Get(':productId')
   @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId', ParseIntPipe) productId: number) {
-    // Forma de express
-    // response.status(200).send({
-    //   message: `product ${productId}`,
-    // });
     return this.productsService.findOne(productId);
   }
 
   @Post()
   create(@Body() payload: CreateProductDto) {
-    // return {
-    //   message: 'accion para crear',
-    //   payload,
-    // };
     this.productsService.create(payload);
   }
 
@@ -77,10 +53,6 @@ export class ProductsController {
     @Param('productId', ParseIntPipe) productId: number,
     @Body() payload: UpdateProductDto,
   ) {
-    // return {
-    //   productId,
-    //   payload,
-    // };
     this.productsService.update(productId, payload);
   }
 
